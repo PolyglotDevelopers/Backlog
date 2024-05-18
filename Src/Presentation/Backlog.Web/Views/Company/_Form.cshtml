@@ -1,0 +1,150 @@
+﻿@model CompanyModel
+@Html.AntiForgeryToken()
+<input type="hidden" asp-for="Id" />
+<div asp-validation-summary="ModelOnly" class="message-error"></div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="mb-3">
+            <pd-label asp-for="TradeName" />
+            <input asp-for="TradeName" class="form-control form-control-maxlength" autocomplete="off" maxlength="750" />
+            <span asp-validation-for="TradeName" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="mb-3">
+            <pd-label asp-for="RegisteredName" />
+            <input asp-for="RegisteredName" class="form-control form-control-maxlength" autocomplete="off" maxlength="750" />
+            <span asp-validation-for="RegisteredName" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="LicenseNumber" />
+            <input asp-for="LicenseNumber" class="form-control form-control-maxlength" autocomplete="off" maxlength="150" />
+            <span asp-validation-for="LicenseNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="TaxNumber" />
+            <input asp-for="TaxNumber" class="form-control form-control-maxlength" autocomplete="off" maxlength="150" />
+            <span asp-validation-for="TaxNumber" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <div class="mb-3">
+            <pd-label asp-for="RegisteredOn" />
+            <input asp-for="RegisteredOn" class="form-control datepicker" autocomplete="off" type="text" />
+            <span asp-validation-for="RegisteredOn" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="mb-3">
+            <pd-label asp-for="ContactPerson" />
+            <input asp-for="ContactPerson" class="form-control form-control-maxlength" autocomplete="off" maxlength="100" />
+            <span asp-validation-for="ContactPerson" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="mb-3">
+            <pd-label asp-for="PhoneNumber" />
+            <input asp-for="PhoneNumber" class="form-control form-control-maxlength" autocomplete="off" maxlength="100" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="Email" />
+            <input asp-for="Email" class="form-control form-control-maxlength" autocomplete="off" maxlength="250" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="Website" />
+            <input asp-for="Website" class="form-control form-control-maxlength" autocomplete="off" maxlength="750" />
+            <span asp-validation-for="Website" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="hr-text">@Localize("CompanyPage.AddressSectionTitle").Text</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="Address.Address1" class="form-pd-label"></pd-label>
+            <input asp-for="Address.Address1" class="form-control form-control-maxlength" autocomplete="off" maxlength="750" />
+            <span asp-validation-for="Address.Address1" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="mb-3">
+            <pd-label asp-for="Address.Address2" class="form-pd-label"></pd-label>
+            <input asp-for="Address.Address2" class="form-control form-control-maxlength" autocomplete="off" maxlength="750" />
+            <span asp-validation-for="Address.Address2" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="Address.CountryId" class="form-pd-label"></pd-label>
+            <select asp-for="Address.CountryId" asp-items="Model.AvailableCountries" class="form-control select2"></select>
+            <span asp-validation-for="Address.CountryId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="Address.StateProvinceId" class="form-pd-label"></pd-label>
+            <select asp-for="Address.StateProvinceId" asp-items="Model.AvailableStates" class="form-control select2"></select>
+            <span asp-validation-for="Address.StateProvinceId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="Address.City" class="form-pd-label"></pd-label>
+            <input asp-for="Address.City" class="form-control form-control-maxlength" autocomplete="off" maxlength="50" />
+            <span asp-validation-for="Address.City" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="Address.ZipPostalCode" class="form-pd-label"></pd-label>
+            <input asp-for="Address.ZipPostalCode" class="form-control numeric-tb form-control-maxlength" autocomplete="off" maxlength="10" />
+            <span asp-validation-for="Address.ZipPostalCode" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="CurrencyId" class="form-pd-label"></pd-label>
+            <select asp-for="CurrencyId" asp-items="Model.AvailableCurrencies" class="form-control select2"></select>
+            <span asp-validation-for="CurrencyId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="mb-3">
+            <pd-label asp-for="LanguageId" class="form-pd-label"></pd-label>
+            <select asp-for="LanguageId" asp-items="Model.AvailableLanguages" class="form-control select2"></select>
+            <span asp-validation-for="LanguageId" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#Address_CountryId").change(function () {
+            var dto = {
+                country: $(this).val(),
+            };
+            JSManager.bindSelect("Address_StateProvinceId", "@Url.Action("GetStates", "StateProvince")", dto);
+        });
+    });
+</script>

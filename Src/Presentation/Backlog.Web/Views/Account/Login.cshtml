@@ -1,0 +1,43 @@
+﻿@model LoginModel
+@inject IHttpHelper httpHelper
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<div class="container container-tight py-4">
+    <div class="card card-md">
+        <div class="card-body pb-3">
+            <div class="text-center">
+                <a href="." class="navbar-brand navbar-brand-autodark">
+                    <img src="~/images/brand/logo.png" alt="Backlog" />
+                </a>
+            </div>
+            <div class="hr-text">Login to your account</div>
+            <form asp-action="Login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" type="text" class="form-control" placeholder="Enter your username" autofocus />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="***********************" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-check">
+                        <input type="checkbox" class="form-check-input" />
+                        <span class="form-check-label">Remember me on this device</span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                </div>
+            </form>
+        </div>
+        <div class="text-center text-muted mb-4">
+            Forgot password? <a href="./sign-up.html" tabindex="-1">Reset</a>
+        </div>
+    </div>
+</div>

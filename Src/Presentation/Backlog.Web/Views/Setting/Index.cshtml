@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Setting";
+}
+
+@await Html.PartialAsync("DataTable", new DataTableModel
+{
+    Name = "SettingGrid",
+    Title = "Setting",
+    UrlRead = Url.Action("DataRead"),
+    ColumnActions = new List<ActionModel>
+    {
+        new ActionModel
+        {
+            Title = "Edit",
+            Url = Url.Action("Edit"),
+            Text = "Edit",
+            Icon = "far fa-edit",
+            ReferenceParameter = "Id",
+            ModalSize = "col-md-4",
+            HyperLinkType = HyperLinkTypeEnum.HYPERLINK_TEXT_ICON,
+            NavigationType = NavigationTypeEnum.MODAL,
+            ButtonColor = ButtonColorEnum.PRIMARY
+        }
+    },
+    Columns = new List<ColumnModel>
+    {
+        new ColumnModel {Title = "Name", DataColumn = "Name"},
+        new ColumnModel {Title = "Value", DataColumn = "Value"}
+    }
+})

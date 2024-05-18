@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - Backlog</title>
+    <!-- Favicon -->
+    <link rel="icon" href="~/images/brand/favicon.ico" type="image/x-icon" />
+    @*-- Plugin CSS --*@
+    <link href="~/lib/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery-confirm/css/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/css/toastr.min.css" rel="stylesheet" />    
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" />
+    <link href="~/css/theme/tabler.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
+    @*-- Core Scripts (Head)--*@
+    <script src="~/lib/jquery/jquery.min.js"></script>
+</head>
+
+<body id="body-app">
+    <div class="page">
+        <partial name="_Header" />
+        @* <aside class="main-sidebar elevation-4 sidebar-dark-info">
+        @await Component.InvokeAsync("Navigation")
+        </aside> *@
+        <div class="page-wrapper" id="dvWrapper">
+            <div class="page-body">
+                <div class="container-xl">
+                    @RenderBody()
+                </div>
+            </div>
+            <partial name="_Footer" />
+        </div>
+    </div>
+    @*-- Plugin Scripts --*@
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/jquery-blockUI/jquery.blockUI.js"></script>
+    <script src="~/lib/jquery-confirm/js/jquery-confirm.min.js"></script>
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script src="~/lib/toastr/js/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+    @*-- Core Scripts --*@
+    <script src="~/js/theme/tabler.min.js"></script>
+    <script src="~/js/datatable-helper.js" asp-append-version="true"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    @RenderSection("scripts", required: false)
+    <partial name="_OffCanvas" />    
+</body>
+
+</html>

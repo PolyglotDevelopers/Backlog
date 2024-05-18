@@ -1,0 +1,91 @@
+﻿@model MenuModel
+@{
+    var controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var maxCount = 10;
+}
+<header class="navbar-expand-md">
+    <div class="collapse navbar-collapse" id="navbar-menu">
+        <div class="navbar">
+            <div class="container-xl">
+                <ul class="navbar-nav">
+                    @foreach (var parent in Model.MenuItems.Where(x => x.ParentCode == 0))
+                    {
+                        var parentIcon = string.IsNullOrEmpty(parent.Icon) ? "cursor" : parent.Icon;
+                        var menuItems = Model.MenuItems.Where(x => x.ParentCode == parent.Code).ToList();
+                        var activeParentClass = menuItems.Any(x => x.ControllerName == controllerName) ? "active" : "";
+                        if (menuItems.Any())
+                        {
+                            <li class="nav-item dropdown @activeParentClass">
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="@parentIcon"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        @parent.Name
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    @if (menuItems.Count() > maxCount)
+                                    {                                        
+                                        var colCount = Math.Ceiling((decimal)menuItems.Count() / maxCount);
+                                        <div class="dropdown-menu-columns">
+                                            @for (var i = 0; i < colCount; i++)
+                                            {                                                
+                                                <div class="dropdown-menu-column">
+                                                    @foreach (var menu in menuItems.Skip(i * maxCount).Take(maxCount))
+                                                    {
+                                                        var activeClass = menu.ControllerName == controllerName ? "active" : "";
+                                                        <a class="dropdown-item @activeClass" asp-action="@menu.ActionName" asp-controller="@menu.ControllerName">
+                                                            <i class="fas fa-angle-double-right me-2"></i>@menu.Name
+                                                        </a>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        foreach (var menu in menuItems)
+                                        {
+                                            var activeClass = menu.ControllerName == controllerName ? "active" : "";
+                                            <a asp-action="@menu.ActionName" asp-controller="@menu.ControllerName" class="dropdown-item" data-parent="@menu.ParentCode">
+                                                <i class="fas fa-angle-double-right me-2"></i>@menu.Name
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="@parent.ActionName" asp-controller="@parent.ControllerName">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class=" @parentIcon"></i>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        @parent.Name
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+                <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+                    <form action="./" method="get" autocomplete="off" novalidate>
+                        <div class="input-icon">
+                            <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                    <path d="M21 21l-6 -6" />
+                                </svg>
+                            </span>
+                            <input type="text" value="" class="form-control" placeholder="Search…" aria-label="Search in website">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

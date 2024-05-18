@@ -1,0 +1,54 @@
+body {
+    overflow: hidden;
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-login {
+    border: 0 !important;
+}
+
+/*.signpages {
+    width: 50% !important;
+}
+
+    .signpages .details:before {
+        background: #fff !important;
+    }
+
+signpages .details {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}*/
+
+.changethewords span {
+    font-size: 16px;
+}
+
+.validation-summary-errors {
+    background-color: #f5e9c4;
+    color: #f72828;
+    padding: 0.3rem;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 13px;
+}
+
+    .validation-summary-errors ul {
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+        .validation-summary-errors ul li {
+            list-style: none;
+        }
+.form-control {
+    color: inherit;
+}
+
+.form-control:focus {
+    color: inherit;
+    border-color: #6259ca !important;
+}

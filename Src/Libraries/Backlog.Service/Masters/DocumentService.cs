@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Backlog.Core.Domain.Masters;
+﻿using Backlog.Core.Domain.Masters;
 using Backlog.Data.Repository;
+using Microsoft.AspNetCore.Http;
 
 namespace Backlog.Service.Masters
 {
@@ -26,9 +26,9 @@ namespace Backlog.Service.Masters
             return id == 0 ? null : await _documentRepository.GetByIdAsync(id);
         }
 
-        public async Task<Document> InsertAndGetAsync(IFormFile file, int employeeId)
+        public async Task<Document> InsertAndGetAsync(IFormFile file)
         {
-            if (file == null || employeeId <= 0)
+            if (file == null)
                 throw new ArgumentNullException();
 
             var fileData = GetBytesFromFile(file);
@@ -50,7 +50,7 @@ namespace Backlog.Service.Masters
             return new Document();
         }
 
-        public async Task UpdateAsync(int documentId, IFormFile file, int employeeId)
+        public async Task UpdateAsync(int documentId, IFormFile file)
         {
 
             var entity = await _documentRepository.GetByIdAsync(documentId);

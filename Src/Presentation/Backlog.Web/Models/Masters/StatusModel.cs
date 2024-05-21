@@ -28,4 +28,15 @@ namespace Backlog.Web.Models.Masters
         [LocalizedDisplayName("StatusModel.Active")]
         public bool Active { get; set; }
     }
+
+    public class StatusListModel : BaseModel
+    {
+        public string Name { get; set; }
+
+        public string? TextColor { get; set; }
+
+        public string? BackgroundColor { get; set; }
+
+        public string? IconClass { get; set; }
+    }
 }

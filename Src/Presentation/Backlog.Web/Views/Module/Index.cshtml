@@ -56,6 +56,7 @@
     Columns = new List<ColumnModel>
     {
         new ColumnModel { Title = Localize("ModuleGrid.Name").Text, DataColumn = "Name" },
+        new ColumnModel { Title = Localize("ModuleGrid.ProjectName").Text, DataColumn = "ProjectName" },
         new ColumnModel { Title = Localize("ModuleGrid.Description").Text, DataColumn = "Description" },
         new ColumnModel { Title = Localize("ModuleGrid.Active").Text, DataColumn = "Active", Conditions = new List<ColumnConditionModel>{
             new ColumnConditionModel { Value = "true", Operator = OperatorEnum.EQUAL, Icon = "fa fa-check", TextColor = "#2eb85c" },

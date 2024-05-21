@@ -10,7 +10,7 @@ namespace Backlog.Service.Masters
 
         Task<IList<TaskType>> GetAllAsync(bool showDeleted = false);
 
-        Task<IList<TaskType>> GetAllActiveAsync(bool showDeleted = false);
+        Task<IList<TaskType>> GetAllActiveAsync(bool showDeleted = false, bool cacheData = false);
 
         Task<TaskType> GetByIdAsync(int id);
 

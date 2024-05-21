@@ -1,6 +1,8 @@
 ﻿using Backlog.Core.Common;
 using Backlog.Core.Domain.WorkItems;
 using Backlog.Data.Repository;
+using Backlog.Service.Masters;
+using Microsoft.AspNetCore.Http;
 using System.Linq.Dynamic.Core;
 
 namespace Backlog.Service.WorkItems
@@ -10,13 +12,19 @@ namespace Backlog.Service.WorkItems
         #region Fields
 
         protected readonly IRepository<BacklogItem> _backlogItemRepository;
+        protected readonly IRepository<BacklogItemDocument> _backlogItemDocRepository;
+        protected readonly IDocumentService _documentService;
 
         #endregion
 
         #region Ctor
-        public BacklogItemService(IRepository<BacklogItem> backlogItemRepository)
+        public BacklogItemService(IRepository<BacklogItem> backlogItemRepository,
+            IRepository<BacklogItemDocument> backlogItemDocRepository,
+            IDocumentService documentService)
         {
             _backlogItemRepository = backlogItemRepository;
+            _backlogItemDocRepository = backlogItemDocRepository;
+            _documentService = documentService;
         }
         #endregion
 
@@ -70,6 +78,44 @@ namespace Backlog.Service.WorkItems
                 throw new ArgumentNullException(nameof(entity));
 
             await _backlogItemRepository.InsertAsync(entity);
+        }
+
+        public async Task InsertAsync(BacklogItem entity, List<IFormFile> files)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            entity.Code = Guid.NewGuid();
+
+            if (entity.ParentId == 0)
+                entity.ParentId = null;
+            if (entity.ModuleId == 0)
+                entity.ModuleId = null;
+            if (entity.SubModuleId == 0)
+                entity.SubModuleId = null;
+            if (entity.SprintId == 0)
+                entity.SprintId = null;
+            if (entity.AssigneeId == 0)
+                entity.AssigneeId = null;
+
+            var newEntity = await _backlogItemRepository.InsertAndGetAsync(entity);
+            if (newEntity != null && newEntity.Id > 0 && files != null)
+            {
+                foreach (var file in files)
+                {
+                    var doc = await _documentService.InsertAndGetAsync(file);
+                    if (doc != null && doc.Id > 0)
+                    {
+                        await _backlogItemDocRepository.InsertAsync(new BacklogItemDocument
+                        {
+                            DocumentId = doc.Id,
+                            BacklogItemId = newEntity.Id,
+                            CreatedOn = newEntity.CreatedOn,
+                            CreatedById = newEntity.CreatedById
+                        });
+                    }
+                }
+            }
         }
 
         public async Task UpdateAsync(BacklogItem entity)

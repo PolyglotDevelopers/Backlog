@@ -50,8 +50,9 @@ body {
 .hidden {
     display: none !important;
 }
-.datepicker{
-    z-index:9999 !important;
+
+.datepicker {
+    z-index: 9999 !important;
 }
 /*-------------------------------------------Layout-------------------------------------------*/
 /*-------------------------------------------Validation-------------------------------------------*/
@@ -174,3 +175,13 @@ b {
         background: #009688;
         color: #fff;
     }
+
+.dynamic-ddl {
+    /*max-width:10vh;*/
+}
+
+.badge-status {
+    border-radius: 5px;
+    padding: 2px 4px;
+    font-size: 11px;
+}

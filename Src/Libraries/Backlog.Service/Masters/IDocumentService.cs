@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Backlog.Core.Domain.Masters;
+﻿using Backlog.Core.Domain.Masters;
+using Microsoft.AspNetCore.Http;
 
 namespace Backlog.Service.Masters
 {
@@ -7,9 +7,9 @@ namespace Backlog.Service.Masters
     {
         Task<Document> GetByIdAsync(int id);
 
-        Task<Document> InsertAndGetAsync(IFormFile file, int employeeId);
+        Task<Document> InsertAndGetAsync(IFormFile file);
 
-        Task UpdateAsync(int documentId, IFormFile file, int employeeId);
+        Task UpdateAsync(int documentId, IFormFile file);
 
         Task DeleteAsync(Document entity);
     }

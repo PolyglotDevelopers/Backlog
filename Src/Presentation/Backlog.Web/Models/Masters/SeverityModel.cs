@@ -28,4 +28,15 @@ namespace Backlog.Web.Models.Masters
         [LocalizedDisplayName("SeverityModel.Active")]
         public bool Active { get; set; }
     }
+
+    public class SeverityListModel : BaseModel
+    {
+        public string Name { get; set; }
+
+        public string? TextColor { get; set; }
+
+        public string? BackgroundColor { get; set; }
+
+        public string? IconClass { get; set; }
+    }
 }

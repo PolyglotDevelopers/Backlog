@@ -1,5 +1,6 @@
 ﻿using Backlog.Core.Common;
 using Backlog.Core.Domain.WorkItems;
+using Microsoft.AspNetCore.Http;
 
 namespace Backlog.Service.WorkItems
 {
@@ -13,6 +14,8 @@ namespace Backlog.Service.WorkItems
         Task<BacklogItem> GetByIdAsync(int id);
 
         Task InsertAsync(BacklogItem entity);
+
+        Task InsertAsync(BacklogItem entity, List<IFormFile> files);
 
         Task UpdateAsync(BacklogItem entity);
 

@@ -42,6 +42,14 @@
 
         public static string GenericAttributeCacheKey => "wc.bl.genericattribute.{0}-{1}";
 
+        public static string TaskTypeActiveCache => "wc.bl.tasktype.active";
+
+        public static string StatusActiveCache => "wc.bl.status.active";
+
+        public static string SeverityActiveCache => "wc.bl.severity.active";
+
+        public static string AssignedToActiveCache => "wc.bl.assto.active";
+
         #endregion
 
         #region Employee Settings

@@ -79,6 +79,9 @@ namespace Backlog.Service.Masters
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
+            if (entity.ProjectId == 0)
+                entity.ProjectId = null;
+
             await _moduleRepository.InsertAsync(entity);
         }
 
@@ -87,6 +90,9 @@ namespace Backlog.Service.Masters
 
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
+
+            if (entity.ProjectId == 0)
+                entity.ProjectId = null;
 
             await _moduleRepository.UpdateAsync(entity);
         }

@@ -22,6 +22,7 @@ namespace Backlog.Service.Employees
         protected readonly IRepository<EmployeePassword> _passwordRepository;
         protected readonly IRepository<EmployeeRole> _employeeRoleRepository;
         protected readonly IRepository<EmployeeRoleMap> _employeeRoleMapRepository;
+        protected readonly IRepository<ProjectMemberMap> _employeeRoleMapRepository;
         protected readonly IRepository<EmployeeRolePermissionMap> _permissionMapRepository;
         protected readonly IAddressService _addressService;
         protected readonly IMessageService _messageService;
@@ -122,6 +123,13 @@ namespace Backlog.Service.Employees
         }
 
         public async Task<IList<Employee>> GetAllActiveAsync()
+        {
+            return await _employeeRepository.GetAllAsync(query => query.Where(x =>
+                x.Status == (int)EmployeeStatusEnum.Active &&
+                !x.SystemAccount), false);
+        }
+
+        public async Task<IList<Employee>> GetAllActiveByProjectAsync(int projectId)
         {
             return await _employeeRepository.GetAllAsync(query => query.Where(x =>
                 x.Status == (int)EmployeeStatusEnum.Active &&

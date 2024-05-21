@@ -1,3 +1,10 @@
+using Backlog.Core.Caching;
+using Backlog.Core.Common;
+using Backlog.Data;
+using Backlog.Data.Repository;
+using Backlog.Web.Helpers.Common;
+using Backlog.Web.Helpers.ModelBinding;
+using Backlog.Web.Helpers.Routing;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,13 +14,6 @@ using Newtonsoft.Json.Serialization;
 using Scrutor;
 using StackExchange.Profiling.Storage;
 using System.Net;
-using Backlog.Core.Caching;
-using Backlog.Core.Common;
-using Backlog.Data;
-using Backlog.Data.Repository;
-using Backlog.Web.Helpers.Common;
-using Backlog.Web.Helpers.ModelBinding;
-using Backlog.Web.Helpers.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
@@ -49,6 +49,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ICacheManager, MemoryCacheManager>();
+
+builder.Services.AddScoped<IFileHelper, FileHelper>();
 builder.Services.AddScoped<IWorkContext, WorkContext>();
 
 builder.Services.AddEasyCaching(option => { option.UseInMemory(builder.Configuration, "default", "easycahing:inmemory"); });

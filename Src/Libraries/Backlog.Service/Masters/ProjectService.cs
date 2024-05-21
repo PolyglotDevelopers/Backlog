@@ -1,6 +1,8 @@
-﻿using Backlog.Core.Common;
+﻿using Backlog.Core.Caching;
+using Backlog.Core.Common;
 using Backlog.Core.Domain.Masters;
 using Backlog.Data.Repository;
+using Backlog.Service.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System.Linq.Dynamic.Core;
@@ -13,15 +15,18 @@ namespace Backlog.Service.Masters
 
         protected readonly IRepository<Project> _projectRepository;
         protected readonly IRepository<ProjectMemberMap> _projectMemberMapRepository;
+        protected readonly ICacheManager _cacheManager;
 
         #endregion
 
         #region Ctor
         public ProjectService(IRepository<Project> projectRepository,
-            IRepository<ProjectMemberMap> projectMemberMapRepository)
+            IRepository<ProjectMemberMap> projectMemberMapRepository,
+            ICacheManager cacheManager)
         {
             _projectRepository = projectRepository;
             _projectMemberMapRepository = projectMemberMapRepository;
+            _cacheManager = cacheManager;
         }
         #endregion
 
@@ -56,8 +61,14 @@ namespace Backlog.Service.Masters
             return await _projectRepository.GetAllAsync(includeDeleted: showDeleted);
         }
 
-        public async Task<IList<Project>> GetAllActiveAsync(bool showDeleted = false)
+        public async Task<IList<Project>> GetAllActiveAsync(bool showDeleted = false, bool cacheData = false)
         {
+            if (cacheData)
+            {
+                var key = ServiceConstant.AssignedToActiveCache;
+                return await _cacheManager.GetAsync(key, async () => await _projectRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted));
+            }
+
             return await _projectRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted);
         }
 

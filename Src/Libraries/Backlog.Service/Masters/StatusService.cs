@@ -1,6 +1,8 @@
-﻿using Backlog.Core.Common;
+﻿using Backlog.Core.Caching;
+using Backlog.Core.Common;
 using Backlog.Core.Domain.Masters;
 using Backlog.Data.Repository;
+using Backlog.Service.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System.Linq.Dynamic.Core;
@@ -12,13 +14,16 @@ namespace Backlog.Service.Masters
         #region Fields
 
         protected readonly IRepository<Status> _statusRepository;
+        protected readonly ICacheManager _cacheManager;
 
         #endregion
 
         #region Ctor
-        public StatusService(IRepository<Status> departmentRepository)
+        public StatusService(IRepository<Status> departmentRepository,
+            ICacheManager cacheManager)
         {
             _statusRepository = departmentRepository;
+            _cacheManager = cacheManager;
         }
         #endregion
 
@@ -52,8 +57,14 @@ namespace Backlog.Service.Masters
             return await _statusRepository.GetAllAsync(includeDeleted: showDeleted);
         }
 
-        public async Task<IList<Status>> GetAllActiveAsync(bool showDeleted = false)
+        public async Task<IList<Status>> GetAllActiveAsync(bool showDeleted = false, bool cacheData = false)
         {
+            if (cacheData)
+            {
+                var key = ServiceConstant.StatusActiveCache;
+                return await _cacheManager.GetAsync(key, async () => await _statusRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted));
+            }
+
             return await _statusRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted);
         }
 

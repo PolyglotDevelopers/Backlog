@@ -2,9 +2,11 @@
 using Backlog.Core.Domain.Employees;
 using Backlog.Core.Domain.Localization;
 using Backlog.Core.Domain.Masters;
+using Backlog.Core.Domain.WorkItems;
 using Backlog.Web.Models.Employees;
 using Backlog.Web.Models.Localization;
 using Backlog.Web.Models.Masters;
+using Backlog.Web.Models.WorkItems;
 
 namespace Backlog.Web.Helpers.Mapping
 {
@@ -28,9 +30,12 @@ namespace Backlog.Web.Helpers.Mapping
 
             CreateMap<EmailAccount, EmailAccountModel>().ReverseMap();
             CreateMap<EmailTemplate, EmailTemplateModel>().ReverseMap();
-            CreateMap<Severity, SeverityModel>().ReverseMap();
             CreateMap<Status, StatusModel>().ReverseMap();
+            CreateMap<Status, StatusListModel>();
             CreateMap<TaskType, TaskTypeModel>().ReverseMap();
+            CreateMap<TaskType, TaskTypeListModel>();
+            CreateMap<Severity, SeverityModel>().ReverseMap();
+            CreateMap<Severity, SeverityListModel>();
 
             CreateMap<Address, AddressModel>().ReverseMap();
 
@@ -42,7 +47,9 @@ namespace Backlog.Web.Helpers.Mapping
             CreateMap<Project, ProjectGridModel>().ReverseMap();
             CreateMap<ProjectMemberMap, ProjectMemberModel>().ReverseMap();
 
-            CreateMap<Module, ModuleModel>().ReverseMap();
+            CreateMap<Module, ModuleModel>();
+            CreateMap<ModuleModel, Module>()
+                .ForSourceMember(srs => srs.ProjectName, act => act.DoNotValidate());
             CreateMap<SubModule, SubModuleModel>().ReverseMap();
 
             #endregion
@@ -62,6 +69,13 @@ namespace Backlog.Web.Helpers.Mapping
             CreateMap<EmployeeRole, EmployeeRoleModel>().ReverseMap();
             CreateMap<EmployeeRolePermission, EmployeeRolePermissionModel>().ReverseMap();
             CreateMap<EmployeeRolePermissionMap, EmployeeRolePermissionMapModel>().ReverseMap();
+
+            #endregion
+
+            #region Work Items
+
+            CreateMap<BacklogItem, BacklogItemModel>().ReverseMap()
+                .ForMember(dest => dest.Code, act => act.Ignore());
 
             #endregion
         }

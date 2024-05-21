@@ -10,7 +10,7 @@ namespace Backlog.Service.Masters
 
         Task<IList<Severity>> GetAllAsync(bool showDeleted = false);
 
-        Task<IList<Severity>> GetAllActiveAsync(bool showDeleted = false);
+        Task<IList<Severity>> GetAllActiveAsync(bool showDeleted = false, bool cacheData = false);
 
         Task<Severity> GetByIdAsync(int id);
 

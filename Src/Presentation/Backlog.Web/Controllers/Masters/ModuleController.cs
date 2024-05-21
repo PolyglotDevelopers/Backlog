@@ -11,6 +11,7 @@ using Backlog.Web.Models.Common;
 using Backlog.Web.Models.Datatable;
 using Backlog.Web.Models.Masters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Backlog.Web.Controllers.Masters
 {
@@ -19,6 +20,7 @@ namespace Backlog.Web.Controllers.Masters
         #region Fields
 
         protected readonly IModuleService _moduleService;
+        protected readonly IProjectService _projectService;
         protected readonly IPermissionService _permissionService;
         protected readonly ILocalizationService _localizationService;
         protected readonly IEmployeeActivityService _employeeActivityService;
@@ -30,6 +32,7 @@ namespace Backlog.Web.Controllers.Masters
         #region Ctor
 
         public ModuleController(IModuleService moduleService,
+            IProjectService projectService,
             IPermissionService permissionService,
             ILocalizationService localizationService,
             IEmployeeActivityService employeeActivityService,
@@ -37,6 +40,7 @@ namespace Backlog.Web.Controllers.Masters
             IMapper mapper)
         {
             _moduleService = moduleService;
+            _projectService = projectService;
             _permissionService = permissionService;
             _localizationService = localizationService;
             _employeeActivityService = employeeActivityService;
@@ -63,6 +67,7 @@ namespace Backlog.Web.Controllers.Masters
                 return AccessDeniedPartial();
 
             var model = new ModuleModel();
+            await InitModelAsync(model);
 
             return PartialView(model);
         }
@@ -76,7 +81,6 @@ namespace Backlog.Web.Controllers.Masters
             if (ModelState.IsValid)
             {
                 var entity = _mapper.Map<Module>(model);
-                var employee = await _workContext.GetCurrentEmployeeAsync();
 
                 await _moduleService.InsertAsync(entity);
 
@@ -107,6 +111,7 @@ namespace Backlog.Web.Controllers.Masters
                 return NoDataPartial();
 
             var model = _mapper.Map<ModuleModel>(entity);
+            await InitModelAsync(model);
 
             return PartialView(model);
         }
@@ -204,6 +209,25 @@ namespace Backlog.Web.Controllers.Masters
                 recordsFiltered = data.TotalCount,
                 recordsTotal = data.TotalCount
             });
+        }
+
+        #endregion
+
+        #region Helper
+
+        private async Task InitModelAsync(ModuleModel model)
+        {
+            var projects = await _projectService.GetAllActiveAsync();
+
+            foreach (var item in projects)
+            {
+                model.AvailableProjects.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = item.Id.ToString(),
+                    Selected = item.Id == model.ProjectId
+                });
+            }
         }
 
         #endregion

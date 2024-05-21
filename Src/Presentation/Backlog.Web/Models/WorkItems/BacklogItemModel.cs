@@ -1,10 +1,25 @@
 ﻿using Backlog.Web.Helpers.Attributes;
 using Backlog.Web.Models.Common;
+using Backlog.Web.Models.Masters;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Backlog.Web.Models.WorkItems
 {
     public class BacklogItemModel : BaseModel
     {
+        public BacklogItemModel()
+        {
+            AvailableParents = [new() { Value = "0", Text = "Select" }];
+            AvailableTaskTypes = [];
+            AvailableSeverities = [];
+            AvailableProjects = [];
+            AvailableModules = [new() { Value = "0", Text = "Select" }];
+            AvailableSubModules = [new() { Value = "0", Text = "Select" }];
+            AvailableSprints = [new() { Value = "0", Text = "Select" }];
+            AvailableAssignees = [new() { Value = "0", Text = "Select" }];
+            AvailableStatus = [];
+        }
+
         public Guid Code { get; set; }
 
         [LocalizedDisplayName("BacklogItem.Title")]
@@ -18,6 +33,9 @@ namespace Backlog.Web.Models.WorkItems
 
         [LocalizedDisplayName("BacklogItem.TaskType")]
         public int TaskTypeId { get; set; }
+
+        [LocalizedDisplayName("BacklogItem.Severity")]
+        public int SeverityId { get; set; }
 
         [LocalizedDisplayName("BacklogItem.DueDate")]
         public DateOnly? DueDate { get; set; }
@@ -43,13 +61,39 @@ namespace Backlog.Web.Models.WorkItems
 
         [LocalizedDisplayName("BacklogItem.Status")]
         public int StatusId { get; set; }
+
+        [LocalizedDisplayName("BacklogItem.Files")]
+        public List<IFormFile> Files { get; set; }
+
+        public IList<SelectListItem> AvailableParents { get; set; }
+
+        public IList<SelectListItem> AvailableTaskTypes { get; set; }
+
+        public IList<SelectListItem> AvailableSeverities { get; set; }
+
+        public IList<SelectListItem> AvailableProjects { get; set; }
+
+        public IList<SelectListItem> AvailableModules { get; set; }
+
+        public IList<SelectListItem> AvailableSubModules { get; set; }
+
+        public IList<SelectListItem> AvailableSprints { get; set; }
+
+        public IList<SelectListItem> AvailableAssignees { get; set; }
+
+        public IList<SelectListItem> AvailableStatus { get; set; }
     }
 
     public class BacklogItemGridModel : BaseModel
     {
-        public string Title { get; set; }
+        public BacklogItemGridModel()
+        {
+            TaskType = new TaskTypeListModel();
+            Severity = new SeverityListModel();
+            Status = new StatusListModel();
+        }
 
-        public string TaskType { get; set; }
+        public string Title { get; set; }
 
         public DateOnly? DueDate { get; set; }
 
@@ -67,6 +111,10 @@ namespace Backlog.Web.Models.WorkItems
 
         public int SubTaskCount { get; set; }
 
-        public string Status { get; set; }
+        public TaskTypeListModel TaskType { get; set; }
+
+        public SeverityListModel Severity { get; set; }
+
+        public StatusListModel Status { get; set; }
     }
 }

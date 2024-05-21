@@ -1,6 +1,8 @@
-﻿using Backlog.Core.Common;
+﻿using Backlog.Core.Caching;
+using Backlog.Core.Common;
 using Backlog.Core.Domain.Masters;
 using Backlog.Data.Repository;
+using Backlog.Service.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System.Linq.Dynamic.Core;
@@ -12,13 +14,17 @@ namespace Backlog.Service.Masters
         #region Fields
 
         protected readonly IRepository<Severity> _severityRepository;
+        protected readonly ICacheManager _cacheManager;
 
         #endregion
 
         #region Ctor
-        public SeverityService(IRepository<Severity> departmentRepository)
+        public SeverityService(IRepository<Severity> departmentRepository,
+            ICacheManager cacheManager)
         {
             _severityRepository = departmentRepository;
+            _cacheManager = cacheManager;
+
         }
         #endregion
 
@@ -52,8 +58,14 @@ namespace Backlog.Service.Masters
             return await _severityRepository.GetAllAsync(includeDeleted: showDeleted);
         }
 
-        public async Task<IList<Severity>> GetAllActiveAsync(bool showDeleted = false)
+        public async Task<IList<Severity>> GetAllActiveAsync(bool showDeleted = false, bool cacheData = false)
         {
+            if (cacheData)
+            {
+                var key = ServiceConstant.MenuResourceCacheKey;
+                return await _cacheManager.GetAsync(key, async () => await _severityRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted));
+            }
+
             return await _severityRepository.GetAllAsync(q => q.Where(x => x.Active), showDeleted);
         }
 

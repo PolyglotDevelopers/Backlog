@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backlog.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240518190445_InitialModel")]
-    partial class InitialModel
+    [Migration("20240520111812_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

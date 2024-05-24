@@ -14,14 +14,14 @@ namespace Backlog.Service.Masters
         #region Fields
 
         protected readonly IRepository<Project> _projectRepository;
-        protected readonly IRepository<ProjectMemberMap> _projectMemberMapRepository;
+        protected readonly IRepository<ProjectEmployeeMap> _projectMemberMapRepository;
         protected readonly ICacheManager _cacheManager;
 
         #endregion
 
         #region Ctor
         public ProjectService(IRepository<Project> projectRepository,
-            IRepository<ProjectMemberMap> projectMemberMapRepository,
+            IRepository<ProjectEmployeeMap> projectMemberMapRepository,
             ICacheManager cacheManager)
         {
             _projectRepository = projectRepository;
@@ -118,14 +118,14 @@ namespace Backlog.Service.Masters
 
         #region Members Mapping
 
-        public async Task<IPagedList<ProjectMemberMap>> GetPagedListMembersAsync(int projectId, string search = "", int pageIndex = 0,
+        public async Task<IPagedList<ProjectEmployeeMap>> GetPagedListEmployeesAsync(int projectId, string search = "", int pageIndex = 0,
             int pageSize = int.MaxValue, int sortColumn = -1, string sortDirection = "")
         {
             return await _projectMemberMapRepository.GetAllPagedAsync(query =>
             {
                 if (sortColumn >= 0)
                 {
-                    var propertyInfo = typeof(ProjectMemberMap).GetProperties();
+                    var propertyInfo = typeof(ProjectEmployeeMap).GetProperties();
                     var curOrderBy = propertyInfo[sortColumn].Name + " " + sortDirection;
                     query = query.OrderBy(curOrderBy);
                 }
@@ -142,18 +142,33 @@ namespace Backlog.Service.Masters
             }, pageIndex, pageSize);
         }
 
-        public async Task<ProjectMemberMap> GetMemberByIdAsync(int id)
+        public async Task<ProjectEmployeeMap> GetEmployeeByIdAsync(int id)
         {
             return id == 0 ? null : await _projectMemberMapRepository.GetByIdAsync(id);
         }
 
-        public async Task<ProjectMemberMap> GetMemberByIdAndProjectAsync(int employeeId, int projectId)
+        public async Task<ProjectEmployeeMap> GetEmployeeByIdAndProjectAsync(int employeeId, int projectId)
         {
             var query = _projectMemberMapRepository.Table.AsNoTracking().Where(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task InsertMemberAsync(ProjectMemberMap entity)
+        public async Task<IList<Project>> GetAllAccessibleProjectsForEmployeeAsync(int employeeId, bool cacheData = false)
+        {
+            var query = from map in _projectMemberMapRepository.Table.AsNoTracking()
+                        where map.Project.Active && map.EmployeeId == employeeId
+                        select map.Project;
+
+            if (cacheData)
+            {
+                var key = ServiceConstant.EmployeeProjectsCache;
+                return await _cacheManager.GetAsync(key, async () => await query.ToListAsync());
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task InsertEmployeeAsync(ProjectEmployeeMap entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -161,7 +176,7 @@ namespace Backlog.Service.Masters
             await _projectMemberMapRepository.InsertAsync(entity);
         }
 
-        public async Task UpdateMemberAsync(ProjectMemberMap entity)
+        public async Task UpdateEmployeeAsync(ProjectEmployeeMap entity)
         {
 
             if (entity == null)
@@ -170,7 +185,7 @@ namespace Backlog.Service.Masters
             await _projectMemberMapRepository.UpdateAsync(entity);
         }
 
-        public async Task DeleteMemberAsync(ProjectMemberMap entity)
+        public async Task DeleteEmployeeAsync(ProjectEmployeeMap entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));

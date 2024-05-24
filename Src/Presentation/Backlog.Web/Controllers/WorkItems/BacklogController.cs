@@ -67,7 +67,6 @@ namespace Backlog.Web.Controllers.WorkItems
             _employeeActivityService = employeeActivityService;
             _workContext = workContext;
             _mapper = mapper;
-
         }
 
         #endregion
@@ -178,63 +177,66 @@ namespace Backlog.Web.Controllers.WorkItems
 
         private async Task InitModelAsync(BacklogItemModel model)
         {
-            var taskTypes = await _taskTypeService.GetAllActiveAsync();
-            var severities = await _severityService.GetAllActiveAsync();
-            var projects = await _projectService.GetAllActiveAsync();
-            var modules = await _moduleService.GetAllActiveAsync();
-            //var subModules = await _projectService.GetAllActiveAsync();
-            //var sprints = await _sprintService.GetAllActiveAsync();
-            //var assinees = await _employeeService.GetAllActiveAsync();
-            var status = await _statusService.GetAllActiveAsync();
-
-            foreach (var item in taskTypes)
+            var projects = await _workContext.GetCurrentEmployeeProjectsAsync();
+            if (projects.Count > 0)
             {
-                model.AvailableTaskTypes.Add(new SelectListItem
-                {
-                    Text = item.Name,
-                    Value = item.Id.ToString(),
-                    Selected = item.Id == model.TaskTypeId
-                });
-            }
+                var taskTypes = await _taskTypeService.GetAllActiveAsync();
+                var severities = await _severityService.GetAllActiveAsync();
+                var modules = await _moduleService.GetAllActiveAsync();
+                //var subModules = await _projectService.GetAllActiveAsync();
+                //var sprints = await _sprintService.GetAllActiveAsync();
+                //var assinees = await _employeeService.GetAllActiveAsync();
+                var status = await _statusService.GetAllActiveAsync();
 
-            foreach (var item in severities)
-            {
-                model.AvailableSeverities.Add(new SelectListItem
+                foreach (var item in taskTypes)
                 {
-                    Text = item.Name,
-                    Value = item.Id.ToString(),
-                    Selected = item.Id == model.SeverityId
-                });
-            }
+                    model.AvailableTaskTypes.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString(),
+                        Selected = item.Id == model.TaskTypeId
+                    });
+                }
 
-            foreach (var item in projects)
-            {
-                model.AvailableProjects.Add(new SelectListItem
+                foreach (var item in severities)
                 {
-                    Text = item.Name,
-                    Value = item.Id.ToString(),
-                    Selected = item.Id == model.ProjectId
-                });
-            }
+                    model.AvailableSeverities.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString(),
+                        Selected = item.Id == model.SeverityId
+                    });
+                }
 
-            foreach (var item in modules)
-            {
-                model.AvailableModules.Add(new SelectListItem
+                foreach (var item in projects)
                 {
-                    Text = item.Name,
-                    Value = item.Id.ToString(),
-                    Selected = item.Id == model.ModuleId
-                });
-            }
+                    model.AvailableProjects.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString(),
+                        Selected = item.Id == model.ProjectId
+                    });
+                }
 
-            foreach (var item in status)
-            {
-                model.AvailableStatus.Add(new SelectListItem
+                foreach (var item in modules)
                 {
-                    Text = item.Name,
-                    Value = item.Id.ToString(),
-                    Selected = item.Id == model.StatusId
-                });
+                    model.AvailableModules.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString(),
+                        Selected = item.Id == model.ModuleId
+                    });
+                }
+
+                foreach (var item in status)
+                {
+                    model.AvailableStatus.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString(),
+                        Selected = item.Id == model.StatusId
+                    });
+                }
             }
         }
 

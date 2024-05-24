@@ -50,6 +50,8 @@
 
         public static string AssignedToActiveCache => "wc.bl.assto.active";
 
+        public static string EmployeeProjectsCache => "wc.bl.emp.pro";
+
         #endregion
 
         #region Employee Settings

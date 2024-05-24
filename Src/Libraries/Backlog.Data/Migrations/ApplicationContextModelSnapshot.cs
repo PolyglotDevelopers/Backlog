@@ -959,7 +959,7 @@ namespace Backlog.Data.Migrations
                     b.ToTable("Project", (string)null);
                 });
 
-            modelBuilder.Entity("Backlog.Core.Domain.Masters.ProjectMemberMap", b =>
+            modelBuilder.Entity("Backlog.Core.Domain.Masters.ProjectEmployeeMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -985,7 +985,7 @@ namespace Backlog.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectMemberMap", (string)null);
+                    b.ToTable("ProjectEmployeeMap", (string)null);
                 });
 
             modelBuilder.Entity("Backlog.Core.Domain.Masters.Setting", b =>
@@ -1615,21 +1615,21 @@ namespace Backlog.Data.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Backlog.Core.Domain.Masters.ProjectMemberMap", b =>
+            modelBuilder.Entity("Backlog.Core.Domain.Masters.ProjectEmployeeMap", b =>
                 {
                     b.HasOne("Backlog.Core.Domain.Employees.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("FK_ProjectMemberMap_Employee");
+                        .HasConstraintName("FK_ProjectEmployeeMap_Employee");
 
                     b.HasOne("Backlog.Core.Domain.Masters.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("FK_ProjectMemberMap_Project");
+                        .HasConstraintName("FK_ProjectEmployeeMap_Project");
 
                     b.Navigation("Employee");
 

@@ -9,27 +9,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                <a href=".">
+                <a href="~/">
                     <img src="~/images/brand/logo.png" width="110" height="32" alt="Web Admin" class="navbar-brand-image" />
                 </a>
             </h1>
             <div class="navbar-nav flex-row order-md-last">
                 <div class="nav-item d-none d-md-flex me-3">
                     <div class="btn-list">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-rocket me-2"></i>All Projects
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" style="">
-                                <a class="dropdown-item" href="#">
-                                    All Projects
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">
-                                    Another action
-                                </a>
-                            </div>
-                        </div>
+                        @await Component.InvokeAsync("AccessibleProjects")
                     </div>
                 </div>
                 <div class="d-none d-md-flex">                    

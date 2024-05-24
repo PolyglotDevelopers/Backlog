@@ -8,20 +8,29 @@
     <div class="card-header pb-0">
         <h3><i class="fa fa-edit me-2"></i>@Localize("BacklogPage.Title").Text</h3>
     </div>
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
+    @if (Model.AvailableProjects.Count() > 0)
+    {
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="card-body p-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @await Html.PartialAsync("_Form", Model)
+            </div>
+            <div class="card-footer text-end p-3">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>@Localize("Button.Save")</button>
+                @if (Model.Id <= 0)
+                {
+                    <button type="submit" name="save-continue" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i>@Localize("Button.SaveAndContinue")
+                    </button>
+                }
+                <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-ban me-1"></i>@Localize("Button.Cancel")</a>
+            </div>
+        </form>
+    }
+    else
+    {
         <div class="card-body p-3">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @await Html.PartialAsync("_Form", Model)
+            <div class="alert alert-warning">@Localize("Button.SaveAndContinue")</div>
         </div>
-        <div class="card-footer text-end p-3">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>@Localize("Button.Save")</button>
-            @if (Model.Id <= 0)
-            {
-                <button type="submit" name="save-continue" class="btn btn-success">
-                    <i class="fas fa-save me-1"></i>@Localize("Button.SaveAndContinue")
-                </button>
-            }
-            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-ban me-1"></i>@Localize("Button.Cancel")</a>
-        </div>
-    </form>
+    }
 </div>

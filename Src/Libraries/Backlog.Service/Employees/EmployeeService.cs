@@ -22,7 +22,6 @@ namespace Backlog.Service.Employees
         protected readonly IRepository<EmployeePassword> _passwordRepository;
         protected readonly IRepository<EmployeeRole> _employeeRoleRepository;
         protected readonly IRepository<EmployeeRoleMap> _employeeRoleMapRepository;
-        protected readonly IRepository<ProjectMemberMap> _employeeRoleMapRepository;
         protected readonly IRepository<EmployeeRolePermissionMap> _permissionMapRepository;
         protected readonly IAddressService _addressService;
         protected readonly IMessageService _messageService;

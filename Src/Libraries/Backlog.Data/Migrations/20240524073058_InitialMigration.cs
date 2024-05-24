@@ -785,7 +785,7 @@ namespace Backlog.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectMemberMap",
+                name: "ProjectEmployeeMap",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -797,14 +797,14 @@ namespace Backlog.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectMemberMap", x => x.Id);
+                    table.PrimaryKey("PK_ProjectEmployeeMap", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProjectMemberMap_Employee",
+                        name: "FK_ProjectEmployeeMap_Employee",
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProjectMemberMap_Project",
+                        name: "FK_ProjectEmployeeMap_Project",
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "Id");
@@ -1050,13 +1050,13 @@ namespace Backlog.Data.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectMemberMap_EmployeeId",
-                table: "ProjectMemberMap",
+                name: "IX_ProjectEmployeeMap_EmployeeId",
+                table: "ProjectEmployeeMap",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectMemberMap_ProjectId",
-                table: "ProjectMemberMap",
+                name: "IX_ProjectEmployeeMap_ProjectId",
+                table: "ProjectEmployeeMap",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
@@ -1107,7 +1107,7 @@ namespace Backlog.Data.Migrations
                 name: "Menu");
 
             migrationBuilder.DropTable(
-                name: "ProjectMemberMap");
+                name: "ProjectEmployeeMap");
 
             migrationBuilder.DropTable(
                 name: "Setting");

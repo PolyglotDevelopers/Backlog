@@ -22,20 +22,22 @@ namespace Backlog.Service.Masters
 
         Task DeleteAsync(Project entity);
 
-        #region Members Mapping
+        #region Employee Mapping
 
-        Task<IPagedList<ProjectMemberMap>> GetPagedListMembersAsync(int projectId, string search = "", int pageIndex = 0,
+        Task<IPagedList<ProjectEmployeeMap>> GetPagedListEmployeesAsync(int projectId, string search = "", int pageIndex = 0,
             int pageSize = int.MaxValue, int sortColumn = -1, string sortDirection = "");
 
-        Task<ProjectMemberMap> GetMemberByIdAsync(int id);
+        Task<ProjectEmployeeMap> GetEmployeeByIdAsync(int id);
 
-        Task<ProjectMemberMap> GetMemberByIdAndProjectAsync(int employeeId, int projectId);
+        Task<ProjectEmployeeMap> GetEmployeeByIdAndProjectAsync(int employeeId, int projectId);
 
-        Task InsertMemberAsync(ProjectMemberMap entity);
+        Task<IList<Project>> GetAllAccessibleProjectsForEmployeeAsync(int employeeId, bool cacheData = false);
 
-        Task UpdateMemberAsync(ProjectMemberMap entity);
+        Task InsertEmployeeAsync(ProjectEmployeeMap entity);
 
-        Task DeleteMemberAsync(ProjectMemberMap entity);
+        Task UpdateEmployeeAsync(ProjectEmployeeMap entity);
+
+        Task DeleteEmployeeAsync(ProjectEmployeeMap entity);
 
         #endregion
     }

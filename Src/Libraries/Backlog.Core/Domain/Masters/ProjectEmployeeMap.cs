@@ -3,7 +3,7 @@ using Backlog.Core.Domain.Employees;
 
 namespace Backlog.Core.Domain.Masters
 {
-    public class ProjectMemberMap : BaseEntity
+    public class ProjectEmployeeMap : BaseEntity
     {
         public int EmployeeId { get; set; }
 

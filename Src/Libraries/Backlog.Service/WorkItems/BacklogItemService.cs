@@ -14,17 +14,20 @@ namespace Backlog.Service.WorkItems
         protected readonly IRepository<BacklogItem> _backlogItemRepository;
         protected readonly IRepository<BacklogItemDocument> _backlogItemDocRepository;
         protected readonly IDocumentService _documentService;
+        protected readonly IWorkContext _workContext;
 
         #endregion
 
         #region Ctor
         public BacklogItemService(IRepository<BacklogItem> backlogItemRepository,
             IRepository<BacklogItemDocument> backlogItemDocRepository,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IWorkContext workContext)
         {
             _backlogItemRepository = backlogItemRepository;
             _backlogItemDocRepository = backlogItemDocRepository;
             _documentService = documentService;
+            _workContext = workContext;
         }
         #endregion
 
@@ -33,10 +36,21 @@ namespace Backlog.Service.WorkItems
         public async Task<IPagedList<BacklogItem>> GetPagedListAsync(int projectId, string search = "", int pageIndex = 0,
         int pageSize = int.MaxValue, int sortColumn = -1, string sortDirection = "")
         {
+            var accessibleProjectIds = new List<int>();
+
+            if (projectId > 0)
+            {
+                accessibleProjectIds.Add(projectId);
+            }
+            else
+            {
+                var accessibleProjects = await _workContext.GetCurrentEmployeeProjectsAsync();
+                accessibleProjectIds = accessibleProjects.Select(x => x.Id).ToList();
+            }
+
             return await _backlogItemRepository.GetAllPagedAsync(query =>
             {
-                if (projectId > 0)
-                    query = query.Where(x => x.ProjectId == projectId);
+                query = query.Where(x => accessibleProjectIds.Contains(x.ProjectId));
 
                 if (sortColumn >= 0)
                 {

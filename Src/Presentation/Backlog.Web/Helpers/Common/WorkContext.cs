@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Localization;
-using Backlog.Core.Common;
+﻿using Backlog.Core.Common;
 using Backlog.Core.Domain.Employees;
 using Backlog.Core.Domain.Localization;
 using Backlog.Core.Domain.Masters;
 using Backlog.Service.Authentication;
 using Backlog.Service.Localization;
+using Backlog.Service.Masters;
+using Microsoft.AspNetCore.Localization;
 
 namespace Backlog.Web.Helpers.Common
 {
@@ -12,24 +13,28 @@ namespace Backlog.Web.Helpers.Common
     {
         #region Fields
 
+        protected readonly ILanguageService _languageService;
+        protected readonly IProjectService _projectService;
         protected readonly IAuthenticationService _authenticationService;
         protected readonly IHttpContextAccessor _httpContextAccessor;
-        protected readonly ILanguageService _languageService;
         protected Employee _cachedEmployee;
         protected Language _cachedLanguage;
         protected Currency _cachedCurrency;
+        protected List<Project> _cachedProjects;
 
         #endregion Fields
 
         #region Ctor
 
-        public WorkContext(IAuthenticationService authenticationService,
-            IHttpContextAccessor httpContextAccessor,
-            ILanguageService languageService)
+        public WorkContext(ILanguageService languageService,
+            IProjectService projectService,
+            IAuthenticationService authenticationService,
+            IHttpContextAccessor httpContextAccessor)
         {
+            _languageService = languageService;
+            _projectService = projectService;
             _authenticationService = authenticationService;
             _httpContextAccessor = httpContextAccessor;
-            _languageService = languageService;
         }
 
         #endregion Ctor
@@ -66,15 +71,29 @@ namespace Backlog.Web.Helpers.Common
             var employee = await GetCurrentEmployeeAsync();
 
             var currentLanguageId = employee.LanguageId;
-            var allStoreLanguages = await _languageService.GetAllAsync();
+            var allLanguages = await _languageService.GetAllAsync();
 
-            var detectedLanguage = allStoreLanguages.FirstOrDefault(language => language.Id == currentLanguageId);
+            var detectedLanguage = allLanguages.FirstOrDefault(language => language.Id == currentLanguageId);
 
             SetLanguageCookie(detectedLanguage);
 
             _cachedLanguage = detectedLanguage;
 
             return _cachedLanguage;
+        }
+
+        public virtual async Task<List<Project>> GetCurrentEmployeeProjectsAsync()
+        {
+            if (_cachedProjects != null)
+                return _cachedProjects;
+
+            var employee = await GetCurrentEmployeeAsync();
+
+            var accessibleProjects = await _projectService.GetAllAccessibleProjectsForEmployeeAsync(employee.Id);
+
+            _cachedProjects = accessibleProjects.ToList();
+
+            return _cachedProjects;
         }
 
         #endregion

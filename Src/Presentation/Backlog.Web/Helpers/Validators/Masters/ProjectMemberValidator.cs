@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Backlog.Web.Helpers.Validators.Masters
 {
-    public class ProjectMemberValidator : AbstractValidator<ProjectMemberModel>
+    public class ProjectMemberValidator : AbstractValidator<ProjectEmployeeModel>
     {
         public ProjectMemberValidator(ILocalizationService localizationService, IProjectService projectService)
         {
@@ -17,10 +17,10 @@ namespace Backlog.Web.Helpers.Validators.Masters
                 {
                     if (x.Id > 0)
                     {
-                        var editedEntity = await projectService.GetMemberByIdAndProjectAsync(x.EmployeeId, x.ProjectId);
+                        var editedEntity = await projectService.GetEmployeeByIdAndProjectAsync(x.EmployeeId, x.ProjectId);
                         return (editedEntity != null) && (editedEntity.EmployeeId == x.EmployeeId);
                     }
-                    var entity = await projectService.GetMemberByIdAndProjectAsync(x.EmployeeId, x.ProjectId);
+                    var entity = await projectService.GetEmployeeByIdAndProjectAsync(x.EmployeeId, x.ProjectId);
                     return entity == null;
                     return entity == null;
                 }).WithMessageAwait(localizationService.GetResourceAsync("ProjectMemberModel.Employee.UniqueMsg"));

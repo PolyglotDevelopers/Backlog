@@ -45,7 +45,8 @@ namespace Backlog.Web.Helpers.Mapping
             CreateMap<Client, ClientModel>().ReverseMap();
             CreateMap<Project, ProjectModel>().ReverseMap();
             CreateMap<Project, ProjectGridModel>().ReverseMap();
-            CreateMap<ProjectMemberMap, ProjectMemberModel>().ReverseMap();
+            CreateMap<ProjectEmployeeMap, ProjectEmployeeModel>().ReverseMap();
+            CreateMap<Project, AccessibleEmployeeProjectModel>();
 
             CreateMap<Module, ModuleModel>();
             CreateMap<ModuleModel, Module>()

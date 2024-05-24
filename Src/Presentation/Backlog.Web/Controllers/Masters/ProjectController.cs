@@ -169,7 +169,7 @@ namespace Backlog.Web.Controllers.Masters
             if (!await _permissionService.AuthorizeAsync(PermissionProvider.ManageProject))
                 return AccessDeniedPartial();
 
-            var model = new ProjectMemberModel
+            var model = new ProjectEmployeeModel
             {
                 ProjectId = projectId
             };
@@ -180,23 +180,23 @@ namespace Backlog.Web.Controllers.Masters
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMember(ProjectMemberModel model)
+        public async Task<IActionResult> AddMember(ProjectEmployeeModel model)
         {
             if (!await _permissionService.AuthorizeAsync(PermissionProvider.ManageProject))
                 return AccessDeniedPartial();
 
             if (ModelState.IsValid)
             {
-                var entity = new ProjectMemberMap
+                var entity = new ProjectEmployeeMap
                 {
                     EmployeeId = model.EmployeeId,
                     ProjectId = model.ProjectId
                 };
                 var employee = await _employeeService.GetByIdAsync(model.EmployeeId);
 
-                await _projectService.InsertMemberAsync(entity);
+                await _projectService.InsertEmployeeAsync(entity);
 
-                await _employeeActivityService.InsertAsync("ProjectMember", string.Format(await _localizationService.GetResourceAsync("Log.RecordCreated"), employee.Name), entity);
+                await _employeeActivityService.InsertAsync("ProjectEmployee", string.Format(await _localizationService.GetResourceAsync("Log.RecordCreated"), employee.Name), entity);
 
                 return Json(new JsonResponseModel
                 {
@@ -218,30 +218,30 @@ namespace Backlog.Web.Controllers.Masters
             if (!await _permissionService.AuthorizeAsync(PermissionProvider.ManageProject))
                 return AccessDeniedPartial();
 
-            var entity = await _projectService.GetMemberByIdAsync(id);
+            var entity = await _projectService.GetEmployeeByIdAsync(id);
             if (entity == null)
                 return NoDataPartial();
 
-            var model = _mapper.Map<ProjectMemberModel>(entity);
+            var model = _mapper.Map<ProjectEmployeeModel>(entity);
             await InitMemberModelAsync(model);
 
             return PartialView(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditMember(ProjectMemberModel model)
+        public async Task<IActionResult> EditMember(ProjectEmployeeModel model)
         {
             if (!await _permissionService.AuthorizeAsync(PermissionProvider.ManageProject))
                 return AccessDeniedPartial();
 
             if (ModelState.IsValid)
             {
-                var entity = await _projectService.GetMemberByIdAsync(model.Id);
+                var entity = await _projectService.GetEmployeeByIdAsync(model.Id);
                 entity = _mapper.Map(model, entity);
 
-                await _projectService.UpdateMemberAsync(entity);
+                await _projectService.UpdateEmployeeAsync(entity);
 
-                await _employeeActivityService.InsertAsync("ProjectMember", string.Format(await _localizationService.GetResourceAsync("Log.RecordUpdated"), entity.Employee.Name), entity);
+                await _employeeActivityService.InsertAsync("ProjectEmployee", string.Format(await _localizationService.GetResourceAsync("Log.RecordUpdated"), entity.Employee.Name), entity);
 
                 return Json(new JsonResponseModel
                 {
@@ -264,7 +264,7 @@ namespace Backlog.Web.Controllers.Masters
             if (!await _permissionService.AuthorizeAsync(PermissionProvider.ManageProject))
                 return AccessDeniedPartial();
 
-            var entity = await _projectService.GetMemberByIdAsync(id);
+            var entity = await _projectService.GetEmployeeByIdAsync(id);
             var tempEntity = entity;
             if (entity == null)
                 return Json(new JsonResponseModel
@@ -273,8 +273,8 @@ namespace Backlog.Web.Controllers.Masters
                     Message = await _localizationService.GetResourceAsync("FormNoData.Description")
                 });
 
-            await _projectService.DeleteMemberAsync(entity);
-            await _employeeActivityService.InsertAsync("ProjectMember", string.Format(await _localizationService.GetResourceAsync("Log.RecordDeleted"), tempEntity.Employee.Name), tempEntity);
+            await _projectService.DeleteEmployeeAsync(entity);
+            await _employeeActivityService.InsertAsync("ProjectEmployee", string.Format(await _localizationService.GetResourceAsync("Log.RecordDeleted"), tempEntity.Employee.Name), tempEntity);
 
             return Json(new JsonResponseModel
             {
@@ -349,13 +349,13 @@ namespace Backlog.Web.Controllers.Masters
                 search = Request.Form["search[value]"];
             }
 
-            var data = await _projectService.GetPagedListMembersAsync(projectId, search, request.Start, request.Length,
+            var data = await _projectService.GetPagedListEmployeesAsync(projectId, search, request.Start, request.Length,
                 sortColumn, sortDirection);
 
             return Json(new
             {
                 request.Draw,
-                data = data.Select(x => _mapper.Map<ProjectMemberModel>(x)),
+                data = data.Select(x => _mapper.Map<ProjectEmployeeModel>(x)),
                 recordsFiltered = data.TotalCount,
                 recordsTotal = data.TotalCount
             });
@@ -380,7 +380,7 @@ namespace Backlog.Web.Controllers.Masters
             }
         }
 
-        private async Task InitMemberModelAsync(ProjectMemberModel model)
+        private async Task InitMemberModelAsync(ProjectEmployeeModel model)
         {
             var employees = await _employeeService.GetAllActiveAsync();
 
